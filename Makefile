@@ -1,41 +1,28 @@
 PROJECTNAME=calc
 BIN=build/$(PROJECTNAME)
-CC=gcc
+CC=clang
 
-EXT=c
-INCDIRS=include
-
-# make mode=release
-ifeq ($(mode), release)
-	OPT=-O3
-else
-	OPT=-Og -g
-endif
+OPT=-Og -g
 DEPFLAGS=-MP -MD
-MACROS=
-FLAGS=-Wall -Wextra $(foreach F,$(INCDIRS),-I$(F)) $(OPT) $(DEPFLAGS) $(foreach M,$(MACROS),-D$(M))
+FLAGS=-Wall -Wextra -I. $(DEPFLAGS)
 
-SRC=$(shell find . -name "*.$(EXT)" -path "./src/*")
-OBJ=$(subst ./src/,./build/,$(SRC:.$(EXT)=.o))
+SRC=$(shell ls *.c)
+OBJ=$(foreach S, $(SRC:.c=.o), build/$(S))
 
 $(shell mkdir -p build)
 
 
 all : $(BIN)
 
-$(BIN) : $(OBJ) $(LIBO)
+$(BIN) : $(OBJ)
 	$(CC) $(FLAGS) -o $@ $^
 
 -include $(OBJ:.o=.d) $(LIBO:.o=.d)
 
-build/%.o : src/%.$(EXT)
-	@mkdir -p $(@D)
-	$(CC) $(FLAGS) -o $@ -c $<
-build/%.o : lib/%.$(EXT)
+build/%.o : %.c
 	@mkdir -p $(@D)
 	$(CC) $(FLAGS) -o $@ -c $<
 
-# make run input="program input"
 run : $(BIN)
 	./$< $(input)
 
@@ -43,7 +30,7 @@ clean :
 	rm -rf build/*
 
 check :
-	cppcheck --enable=all --suppress=missingIncludeSystem $(foreach I,$(INCDIRS),-I$(I)) .
+	cppcheck --enable=all --suppress=missingIncludeSystem -I. .
 	flawfinder .
 
 debug : $(BIN)
@@ -58,11 +45,6 @@ push :
 	git push bbsrv
 	git push gh
 
-install : dist
-	cp Makefile ../script
-	mv build/$(PROJECTNAME).tgz ../opt/archive
-	cd .. && rm -rf $(PROJECTNAME)
-
 # alias
 
 r : run
@@ -75,4 +57,4 @@ p : push
 
 d : debug
 
-.PHONY : all run r clean check c debug d dist push p install info
+.PHONY : all run r clean check c debug d dist push p info
