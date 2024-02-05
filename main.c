@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+
+#include "lexer.h"
 
 #define MAX_FILE_NB 64
 #define INIT_SIZE_BUFFER 1024
-
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 void getUserInput(int argc, char **argv, char **file, int *file_len,  char *program,  int *program_len, int *program_cap){
   int skip_buffer[MAX_FILE_NB];
@@ -52,12 +53,51 @@ void getUserInput(int argc, char **argv, char **file, int *file_len,  char *prog
 }
 
 void evaluate(char *program, int len){
-  (void) program;
-  (void) len;
+  if (len <= 0) return;
+  int cursor = 0;
+  Token tok = {0};
+
+  while (cursor <= len && tok.type != END){
+    cursor += next_token(program + cursor, &tok);
+  }
 }
 
 void evaluate_from_file(char *file){
-  (void) file;
+  FILE *f = fopen(file, "rb");
+  if (!f){
+    printf("ERROR: could not open file %s: %s\n", file, strerror(errno));
+    exit(69);
+  }
+
+  fseek(f, 0, SEEK_END);
+  if (f < 0){
+    printf("ERROR: could not seek file %s: %s\n", file, strerror(errno));
+    exit(69);
+  }
+
+  long fsize = ftell(f);
+  if (f < 0){
+    printf("ERROR: could not tell file %s: %s\n", file, strerror(errno));
+    exit(69);
+  }
+  fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+  if (f < 0){
+    printf("ERROR: could not seek file %s: %s\n", file, strerror(errno));
+    exit(69);
+  }
+
+  char *buffer = malloc(fsize + 1);
+  buffer[fsize] = 0;
+
+  fread(buffer, fsize, 1, f);
+  if (f <= 0){
+    printf("ERROR: could not read file %s: %s\n", file, strerror(errno));
+    exit(69);
+  }
+  fclose(f);
+
+  evaluate(buffer, fsize);
+  free(buffer);
 }
 
 int main(int argc, char **argv){
@@ -75,5 +115,6 @@ int main(int argc, char **argv){
 
   evaluate(program, program_len);
 
+  puts("");
 	return 0;
 }
