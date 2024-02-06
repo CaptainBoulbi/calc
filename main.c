@@ -52,17 +52,57 @@ void getUserInput(int argc, char **argv, char **file, int *file_len,  char *prog
   }
 }
 
-void evaluate(char *program, int len){
+void print_tok(Token tok){
+  switch (tok.type) {
+    case FIRST:
+      printf("FIRST ");
+      break;
+    case ADD:
+      printf("ADD ");
+      break;
+    case MIN:
+      printf("MIN ");
+      break;
+    case MUL:
+      printf("MUL ");
+      break;
+    case DIV:
+      printf("DIV ");
+      break;
+    case NUMBER:
+      printf("NUMBER(%d) ", tok.number);
+      break;
+    case DECIMAL:
+      printf("DECIMAL(%f) ", tok.decimal);
+      break;
+    case TEXT:
+      printf("TEXT ");
+      break;
+    case END:
+      printf("END ");
+      break;
+    case UNDEFINED:
+      printf("UNDEFINED ");
+      break;
+    case LAST:
+      printf("LAST ");
+      break;
+  }
+}
+
+void interprete(char *program, int len){
   if (len <= 0) return;
   int cursor = 0;
   Token tok = {0};
 
   while (cursor <= len && tok.type != END){
     cursor += next_token(program + cursor, &tok);
+    print_tok(tok);
   }
+  printf("\n");
 }
 
-void evaluate_from_file(char *file){
+void interprete_from_file(char *file){
   FILE *f = fopen(file, "rb");
   if (!f){
     printf("ERROR: could not open file %s: %s\n", file, strerror(errno));
@@ -96,7 +136,7 @@ void evaluate_from_file(char *file){
   }
   fclose(f);
 
-  evaluate(buffer, fsize);
+  interprete(buffer, fsize);
   free(buffer);
 }
 
@@ -110,11 +150,15 @@ int main(int argc, char **argv){
   getUserInput(argc, argv, file, &file_len, program, &program_len, &program_cap);
 
   for (int i=0; i<file_len; i++){
-    evaluate_from_file(file[i]);
+    interprete_from_file(file[i]);
   }
 
-  evaluate(program, program_len);
+  interprete(program, program_len);
 
-  puts("");
+  // for (int i=0; i<program_len; i++){
+  //   printf("%i-", program[i]);
+  // }
+  // printf("\n");
+
 	return 0;
 }

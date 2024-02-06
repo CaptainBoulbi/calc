@@ -4,17 +4,7 @@
 #include <stdio.h>
 
 #define ILLCHAR(c) ((c) < 33 || (c) > 124)
-
-int skip_blank(char **prog){
-  int nb = 0;
-  while (!(**prog == ' ' || **prog == '\t')){
-    if (**prog != '\0')
-      return nb;
-    (*prog)++;
-    nb++;
-  }
-  return nb;
-}
+#define ISNUM(c) ((c) >= 48 && (c) <= 57)
 
 int next_token(char *prog, Token *tok){
   int offset = 0;
@@ -26,56 +16,48 @@ int next_token(char *prog, Token *tok){
   }
 
   if (ILLCHAR(prog[offset])){
-    printf("ILLEGAL CHARACTER WTF IS WRONG WITH YOU, KILL YOURSELF IDIOT.\n");
+    printf("(%d) ILLEGAL CHARACTER WTF IS WRONG WITH YOU, KILL YOURSELF IDIOT.\n", prog[offset]);
     exit(666);
   }
 
   switch (prog[offset]) {
     case '+':
       tok->type = ADD;
-      printf("ADD");
       break;
     case '-':
       tok->type = MIN;
-      printf("MIN");
       break;
     case '/':
       tok->type = DIV;
-      printf("DIV");
       break;
     case '*':
       tok->type = MUL;
-      printf("MUL");
       break;
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
+    case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
       tok->type = NUMBER;
-      printf("NUMBER");
-      for (; prog[offset] != ' ' && prog[offset] != '\0'; offset++);
+      for (; ISNUM(prog[offset]); offset++);
+      if (prog[offset] == '.'){
+        tok->type = DECIMAL;
+        offset++;
+        for (; ISNUM(prog[offset]); offset++);
+      }
+      char swap = prog[offset];
       prog[offset] = '\0';
-      tok->number = atoi(prog);
-      prog[offset] = ' ';
-      printf("(%d)", tok->number);
+      if (tok->type == NUMBER)
+        tok->number = atoi(prog);
+      else if (tok->type == DECIMAL)
+        tok->decimal = atof(prog);
+      prog[offset] = swap;
+      offset--;
       break;
     case '\0':
       tok->type = END;
-      printf("END");
       break;
     default:
       tok->type = UNDEFINED;
-      printf("UNDEFINED(%d)", prog[offset]);
       break;
   }
 
-  printf(" ");
   fflush(stdout);
   
   return offset+1;
