@@ -54,6 +54,90 @@ void getUserInput(int argc, char **argv, char **file, int *file_len,  char *prog
 
 void print_tok(Token tok){
   switch (tok.type) {
+    case AND:
+      printf("AND ");
+      break;
+    case OR:
+      printf("OR ");
+      break;
+    case NOT_ASS:
+      printf("NOT_ASS ");
+      break;
+    case RIGHT_SHIFT:
+      printf("RIGHT_SHIFT ");
+      break;
+    case LEFT_SHIFT:
+      printf("LEFT_SHIFT ");
+      break;
+    case BIT_NOT:
+      printf("BIT_NOT ");
+      break;
+    case BIT_XOR:
+      printf("BIT_XOR ");
+      break;
+    case BIT_OR:
+      printf("BIT_OR ");
+      break;
+    case BIT_AND:
+      printf("BIT_AND ");
+      break;
+    case RIGHT_SHIFT_ASS:
+      printf("RIGHT_SHIFT_ASS ");
+      break;
+    case LEFT_SHIFT_ASS:
+      printf("LEFT_SHIFT_ASS ");
+      break;
+    case XOR_ASS:
+      printf("XOR_ASS ");
+      break;
+    case OR_ASS:
+      printf("OR_ASS ");
+      break;
+    case AND_ASS:
+      printf("AND_ASS ");
+      break;
+    case MOD_ASS:
+      printf("MOD_ASS ");
+      break;
+    case DIV_ASS:
+      printf("DIV_ASS ");
+      break;
+    case MUL_ASS:
+      printf("MUL_ASS ");
+      break;
+    case MIN_ASS:
+      printf("MIN_ASS ");
+      break;
+    case ADD_ASS:
+      printf("ADD_ASS ");
+      break;
+    case EQ_ASS:
+      printf("EQ_ASS ");
+      break;
+    case NE:
+      printf("NE ");
+      break;
+    case LT:
+      printf("LT ");
+      break;
+    case LE:
+      printf("LE ");
+      break;
+    case GT:
+      printf("GT ");
+      break;
+    case GE:
+      printf("GE ");
+      break;
+    case EQ:
+      printf("EQ ");
+      break;
+    case NOT:
+      printf("NOT ");
+      break;
+    case MOD:
+      printf("MOD ");
+      break;
     case FIRST:
       printf("FIRST ");
       break;
@@ -69,14 +153,20 @@ void print_tok(Token tok){
     case DIV:
       printf("DIV ");
       break;
+    case PARENT:
+      printf("PARENT ");
+      break;
+    case THESE:
+      printf("THESE ");
+      break;
     case NUMBER:
       printf("NUMBER(%d) ", tok.number);
       break;
     case DECIMAL:
-      printf("DECIMAL(%f) ", tok.decimal);
+      printf("DECIMAL(%.2f) ", tok.decimal);
       break;
     case TEXT:
-      printf("TEXT ");
+      printf("TEXT(%.*s) ", tok.len, tok.text);
       break;
     case END:
       printf("END ");
@@ -109,19 +199,19 @@ void interprete_from_file(char *file){
     exit(69);
   }
 
-  fseek(f, 0, SEEK_END);
-  if (f < 0){
+  if (fseek(f, 0, SEEK_END) < 0){
     printf("ERROR: could not seek file %s: %s\n", file, strerror(errno));
     exit(69);
   }
 
   long fsize = ftell(f);
-  if (f < 0){
+  if (fsize < 0){
     printf("ERROR: could not tell file %s: %s\n", file, strerror(errno));
     exit(69);
   }
-  fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-  if (f < 0){
+
+  /* same as rewind(f); */
+  if (fseek(f, 0, SEEK_SET) < 0){
     printf("ERROR: could not seek file %s: %s\n", file, strerror(errno));
     exit(69);
   }
@@ -129,8 +219,7 @@ void interprete_from_file(char *file){
   char *buffer = malloc(fsize + 1);
   buffer[fsize] = 0;
 
-  fread(buffer, fsize, 1, f);
-  if (f <= 0){
+  if (fread(buffer, fsize, 1, f) == 0){
     printf("ERROR: could not read file %s: %s\n", file, strerror(errno));
     exit(69);
   }

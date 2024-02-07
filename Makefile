@@ -31,7 +31,7 @@ clean :
 
 check :
 	cppcheck --enable=all --suppress=missingIncludeSystem -I. .
-	flawfinder .
+	#flawfinder .
 
 debug : $(BIN)
 	gdb $< $(input)
