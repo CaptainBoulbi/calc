@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #define ILLCHAR(c) (((c) < 33 && (c) != 10) || (c) > 126)
 #define ISBLANKCHAR(c) ((c) == ' ' || (c) == '\t' || (c) == '\n')
@@ -183,6 +184,7 @@ int next_token(char *prog, Token *tok){
         int onset = 0;
         while (ISNAME(prog[offset+onset])) onset++;
         tok->text = malloc(onset);
+        assert(tok->text && "ram issue");
         tok->len = onset;
         strncpy(tok->text, &prog[offset], onset);
         offset += onset-1;

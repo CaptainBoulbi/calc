@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -233,6 +234,7 @@ int main(int argc, char **argv){
   char *file[MAX_FILE_NB] = {0};
   int file_len = 0;
   char *program = malloc(INIT_SIZE_BUFFER);
+  assert(program && "ram issue");
   int program_len = 0;
   int program_cap = INIT_SIZE_BUFFER;
 
