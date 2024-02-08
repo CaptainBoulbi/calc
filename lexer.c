@@ -11,6 +11,24 @@
 #define ISLETTER(c) (((c) >= 65 && (c) <= 90) || ((c) >= 97 && (c) <= 122))
 #define ISNAME(c) ((c) == '_' || ISLETTER(c) || ISNUM(c))
 
+char *lookup_TokenType[] = {
+  [FIRST] = "FIRST",
+  [ADD] = "ADD", [MIN] = "MIN", [MUL] = "MUL", [DIV] = "DIV", [MOD] = "MOD",
+  [NUMBER] = "NUMBER", [DECIMAL] = "DECIMAL",
+  [PARENT] = "PARENT", [THESE] = "THESE",
+  [NOT] = "NOT",
+  [EQ] = "EQ", [GE] = "GE", [GT] = "GT", [LE] = "LE", [LT] = "LT", [NE] = "NE",
+  [AND] = "AND", [OR] = "OR",
+  [EQ_ASS] = "EQ_ASS", [ADD_ASS] = "ADD_ASS", [MIN_ASS] = "MIN_ASS", [MUL_ASS] = "MUL_ASS", [DIV_ASS] = "DIV_ASS", [MOD_ASS] = "MOD_ASS",
+  [AND_ASS] = "AND_ASS", [OR_ASS] = "OR_ASS", [XOR_ASS] = "XOR_ASS", [NOT_ASS] = "NOT_ASS",
+  [LEFT_SHIFT_ASS] = "LEFT_SHIFT_ASS", [RIGHT_SHIFT_ASS] = "RIGHT_SHIFT_ASS",
+  [BIT_AND] = "BIT_AND", [BIT_OR] = "BIT_OR", [BIT_XOR] = "BIT_XOR", [BIT_NOT] = "BIT_NOT",
+  [LEFT_SHIFT] = "LEFT_SHIFT", [RIGHT_SHIFT] = "RIGHT_SHIFT",
+  [TEXT] = "TEXT",
+  [END] = "END", [UNDEFINED] = "UNDEFINED",
+  [LAST] = "LAST",
+};
+
 int next_token(char *prog, Token *tok){
   int offset = 0;
   while (ISBLANKCHAR(prog[offset])) offset++;
@@ -195,4 +213,22 @@ int next_token(char *prog, Token *tok){
   }
   
   return offset+1;
+}
+
+void print_tok(Token tok){
+  printf("%s", lookup_TokenType[tok.type]);
+  switch (tok.type) {
+    case NUMBER:
+      printf("(%d) ", tok.number);
+      break;
+    case DECIMAL:
+      printf("(%.2f) ", tok.decimal);
+      break;
+    case TEXT:
+      printf("(%.*s) ", tok.len, tok.text);
+      break;
+    default:
+      printf(" ");
+      break;
+  }
 }

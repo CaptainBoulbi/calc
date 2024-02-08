@@ -19,6 +19,8 @@ typedef enum TokenType {
   LAST,
 } TokenType;
 
+extern char *lookup_TokenType[]; // in lexer.c
+
 typedef double Decimal;
 
 typedef struct Token {
@@ -34,5 +36,6 @@ typedef struct Token {
 } Token;
 
 int next_token(char *prog, Token *tok);
+void print_tok(Token tok);
 
 #endif // LEXER_H
