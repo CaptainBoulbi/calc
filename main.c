@@ -5,6 +5,7 @@
 #include <errno.h>
 
 #include "lexer.h"
+#include "parser.h"
 
 #define MAX_FILE_NB 64
 #define INIT_SIZE_BUFFER 1024
@@ -60,9 +61,10 @@ void interprete(char *program, int len){
 
   while (cursor <= len && tok.type != END){
     cursor += next_token(program + cursor, &tok);
-    print_tok(tok);
+    //print_tok(tok);
+    parse(tok);
   }
-  printf("\n");
+  //printf("\n");
 }
 
 void interprete_from_file(char *file){
@@ -118,10 +120,9 @@ int main(int argc, char **argv){
 
   interprete(program, program_len);
 
-  // for (int i=0; i<program_len; i++){
-  //   printf("%i-", program[i]);
-  // }
-  // printf("\n");
+  print_tree(&root);
+  puts("");
+  free_tree(&root);
 
   free(program);
 	return 0;

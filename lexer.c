@@ -216,7 +216,10 @@ int next_token(char *prog, Token *tok){
 }
 
 void print_tok(Token tok){
+  if (tok.type > LAST || tok.type < FIRST) return;
+
   printf("%s", lookup_TokenType[tok.type]);
+  fflush(stdout);
   switch (tok.type) {
     case NUMBER:
       printf("(%d) ", tok.number);

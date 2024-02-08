@@ -1,2 +1,3 @@
 build/*
 .wakatime-project
+test.calc

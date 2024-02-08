@@ -2,9 +2,9 @@ PROJECTNAME=calc
 BIN=build/$(PROJECTNAME)
 CC=clang
 
-OPT=-Og -g
+OPT=-Og -g -ggdb
 DEPFLAGS=-MP -MD
-FLAGS=-Wall -Wextra -I. $(DEPFLAGS) $(EXTRAFLAGS)
+FLAGS=-Wall -Wextra -I. $(OPT) $(DEPFLAGS) $(EXTRAFLAGS)
 
 SRC=$(shell ls *.c)
 OBJ=$(foreach S, $(SRC:.c=.o), build/$(S))
