@@ -4,7 +4,7 @@ CC=clang
 
 OPT=-Og -g
 DEPFLAGS=-MP -MD
-FLAGS=-Wall -Wextra -I. $(DEPFLAGS)
+FLAGS=-Wall -Wextra -I. $(DEPFLAGS) $(EXTRAFLAGS)
 
 SRC=$(shell ls *.c)
 OBJ=$(foreach S, $(SRC:.c=.o), build/$(S))
@@ -31,6 +31,8 @@ clean :
 
 check :
 	cppcheck --enable=all --suppress=missingIncludeSystem -I. .
+	gcc -fanalyzer $(FLAGS) $(SRC) -o $(BIN)
+	for file in $(SRC); do echo "clang analyze $$file :"; clang --analyze $$file -o ./build/clang.analyze; done
 	#flawfinder .
 
 debug : $(BIN)

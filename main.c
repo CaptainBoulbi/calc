@@ -251,5 +251,6 @@ int main(int argc, char **argv){
   // }
   // printf("\n");
 
+  free(program);
 	return 0;
 }
