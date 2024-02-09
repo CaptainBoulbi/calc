@@ -12,7 +12,7 @@
 #define ISNAME(c) ((c) == '_' || ISLETTER(c) || ISNUM(c))
 
 char *lookup_TokenType[] = {
-  [FIRST] = "FIRST",
+  [BEGIN] = "BEGIN",
   [ADD] = "ADD", [MIN] = "MIN", [MUL] = "MUL", [DIV] = "DIV", [MOD] = "MOD",
   [NUMBER] = "NUMBER", [DECIMAL] = "DECIMAL",
   [PARENT] = "PARENT", [THESE] = "THESE",
@@ -24,9 +24,8 @@ char *lookup_TokenType[] = {
   [LEFT_SHIFT_ASS] = "LEFT_SHIFT_ASS", [RIGHT_SHIFT_ASS] = "RIGHT_SHIFT_ASS",
   [BIT_AND] = "BIT_AND", [BIT_OR] = "BIT_OR", [BIT_XOR] = "BIT_XOR", [BIT_NOT] = "BIT_NOT",
   [LEFT_SHIFT] = "LEFT_SHIFT", [RIGHT_SHIFT] = "RIGHT_SHIFT",
-  [TEXT] = "TEXT",
-  [END] = "END", [UNDEFINED] = "UNDEFINED",
-  [LAST] = "LAST",
+  [TEXT] = "TEXT",  [UNDEFINED] = "UNDEFINED",
+  [END] = "END",
 };
 
 int next_token(char *prog, Token *tok){
@@ -216,7 +215,7 @@ int next_token(char *prog, Token *tok){
 }
 
 void print_tok(Token tok){
-  if (tok.type > LAST || tok.type < FIRST) return;
+  if (tok.type > END || tok.type < BEGIN) return;
 
   printf("%s", lookup_TokenType[tok.type]);
   fflush(stdout);

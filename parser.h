@@ -14,6 +14,6 @@ extern TreeNode root;
 
 void print_tree(TreeNode *tn);
 void free_tree(TreeNode *tn);
-void parse(Token tok);
+void parse(char *program, int len);
 
 #endif // PARSER_H

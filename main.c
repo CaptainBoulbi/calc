@@ -56,15 +56,8 @@ void getUserInput(int argc, char **argv, char **file, int *file_len,  char *prog
 
 void interprete(char *program, int len){
   if (len <= 0) return;
-  int cursor = 0;
-  Token tok = {0};
 
-  while (cursor <= len && tok.type != END){
-    cursor += next_token(program + cursor, &tok);
-    //print_tok(tok);
-    parse(tok);
-  }
-  //printf("\n");
+  parse(program, len);
 }
 
 void interprete_from_file(char *file){
@@ -122,7 +115,8 @@ int main(int argc, char **argv){
 
   print_tree(&root);
   puts("");
-  free_tree(&root);
+  free_tree(root.left);
+  free_tree(root.right);
 
   free(program);
 	return 0;
