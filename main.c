@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "eval.h"
 #include "lexer.h"
 #include "parser.h"
 
@@ -113,8 +114,11 @@ int main(int argc, char **argv){
 
   interprete(program, program_len);
 
-  print_tree(&root);
-  puts("");
+  Decimal resultat = evaluate(&root);
+  printf("resultat = %f\n", resultat);
+
+  //print_tree(&root);
+  //puts("");
   free_tree(root.left);
   free_tree(root.right);
 

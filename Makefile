@@ -2,6 +2,7 @@ PROJECTNAME=calc
 BIN=build/$(PROJECTNAME)
 CC=clang
 
+#OPT=-O3
 OPT=-Og -g -ggdb
 DEPFLAGS=-MP -MD
 FLAGS=-Wall -Wextra -I. $(OPT) $(DEPFLAGS) $(EXTRAFLAGS)

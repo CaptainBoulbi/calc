@@ -60,9 +60,12 @@ void parse(char *program, int len){
           curr->parrent = swap;
         }
         break;
+      case END:
+        return;
+        break;
       default:
         // TODO: implement default behavior
-        printf("Not implemented yet.\n");
+        printf("[%s] Not implemented yet.\n", lookup_TokenType[tok.type]);
         break;
     }
   }
