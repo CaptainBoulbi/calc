@@ -36,5 +36,6 @@ typedef struct Token {
 
 int next_token(char *prog, Token *tok);
 void print_tok(Token tok);
+int token_equals(Token tok1, Token tok2);
 
 #endif // LEXER_H

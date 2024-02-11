@@ -234,3 +234,22 @@ void print_tok(Token tok){
       break;
   }
 }
+
+int token_equals(Token tok1, Token tok2){
+  if (tok1.type != tok2.type) {
+    return 0;
+  }
+
+  switch (tok1.type) {
+    case NUMBER:
+      return tok1.number == tok2.number;
+    case DECIMAL:
+      return tok1.decimal == tok2.decimal;
+    case TEXT:
+      if (tok1.len != tok2.len)
+        return 0;
+      return strncmp(tok1.text, tok2.text, tok1.len);
+    default:
+      return 1;
+  }
+}

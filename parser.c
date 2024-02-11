@@ -5,7 +5,12 @@
 #include <stdio.h>
 #include <assert.h>
 
-TreeNode root = {0};
+TreeNode root = {
+  .token   = { .type = BEGIN },
+  .parrent = NULL,
+  .left    = NULL,
+  .right   = NULL,
+};
 TreeNode *curr = &root;
 
 void parse(char *program, int len){
@@ -18,24 +23,24 @@ void parse(char *program, int len){
     switch (tok.type) {
       case ADD:
         {
-        TreeNode * branch = curr;
-        curr = curr->parrent;
+          TreeNode * branch = curr;
+          curr = curr->parrent;
 
-        if (curr->left){
-          curr->right = calloc(1, sizeof(TreeNode));
-          curr->right->token = tok;
+          if (token_equals(curr->left->token, branch->token)){
+            curr->left = calloc(1, sizeof(TreeNode));
+            curr->left->token = tok;
 
-          curr->right->left = branch;
-          curr->right->parrent = curr;
-          curr = curr->right;
-        } else{
-          curr->left = calloc(1, sizeof(TreeNode));
-          curr->left->token = tok;
+            curr->left->left = branch;
+            curr->left->parrent = curr;
+            curr = curr->left;
+          } else{
+            curr->right = calloc(1, sizeof(TreeNode));
+            curr->right->token = tok;
 
-          curr->left->left = branch;
-          curr->left->parrent = curr;
-          curr = curr->left;
-        }
+            curr->right->left = branch;
+            curr->right->parrent = curr;
+            curr = curr->right;
+          }
         }
         break;
       case NUMBER:
@@ -66,9 +71,14 @@ void parse(char *program, int len){
 void print_tree(TreeNode *tn){
   if (tn == NULL) return;
 
+  printf("\n");
   print_tok(tn->token);
+  printf("l(");
   print_tree(tn->left);
+  printf(") ");
+  printf("r(");
   print_tree(tn->right);
+  printf(") ");
 
   return;
 }
