@@ -117,8 +117,8 @@ int main(int argc, char **argv){
   Decimal resultat = evaluate(&root);
   printf("resultat = %f\n", resultat);
 
-  //print_tree(&root);
-  //puts("");
+  print_tree(&root);
+  puts("");
   free_tree(root.left);
   free_tree(root.right);
 

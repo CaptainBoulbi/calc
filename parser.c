@@ -13,6 +13,45 @@ TreeNode root = {
 };
 TreeNode *curr = &root;
 
+void insert_parrent(Token tok){
+  TreeNode * branch = curr;
+  curr = curr->parrent;
+
+  if (token_equals(curr->left->token, branch->token)){
+    curr->left = calloc(1, sizeof(TreeNode));
+    curr->left->token = tok;
+
+    curr->left->left = branch;
+    curr->left->parrent = curr;
+    curr = curr->left;
+  } else{
+    curr->right = calloc(1, sizeof(TreeNode));
+    curr->right->token = tok;
+
+    curr->right->left = branch;
+    curr->right->parrent = curr;
+    curr = curr->right;
+  }
+}
+
+void insert_current(Token tok){
+  if (curr->left){
+    curr->right = calloc(1, sizeof(TreeNode));
+    curr->right->token = tok;
+
+    TreeNode *swap = curr;
+    curr = curr->right;
+    curr->parrent = swap;
+  } else{
+    curr->left = calloc(1, sizeof(TreeNode));
+    curr->left->token = tok;
+
+    TreeNode *swap = curr;
+    curr = curr->left;
+    curr->parrent = swap;
+  }
+}
+
 void parse(char *program, int len){
   if (len <= 0) return;
   int cursor = 0;
@@ -21,44 +60,22 @@ void parse(char *program, int len){
   while (cursor <= len && tok.type != END){
     cursor += next_token(program + cursor, &tok);
     switch (tok.type) {
+      case MUL:
+      case DIV:
+        if (curr->parrent->token.type == DIV || curr->parrent->token.type == MUL)
+          insert_current(tok);
+        else
+          insert_parrent(tok);
+        break;
       case ADD:
-        {
-          TreeNode * branch = curr;
-          curr = curr->parrent;
-
-          if (token_equals(curr->left->token, branch->token)){
-            curr->left = calloc(1, sizeof(TreeNode));
-            curr->left->token = tok;
-
-            curr->left->left = branch;
-            curr->left->parrent = curr;
-            curr = curr->left;
-          } else{
-            curr->right = calloc(1, sizeof(TreeNode));
-            curr->right->token = tok;
-
-            curr->right->left = branch;
-            curr->right->parrent = curr;
-            curr = curr->right;
-          }
-        }
+      case MIN:
+        if (curr->parrent->token.type == ADD || curr->parrent->token.type == MIN)
+          insert_parrent(tok);
+        else
+          insert_current(tok);
         break;
       case NUMBER:
-        if (curr->left){
-          curr->right = calloc(1, sizeof(TreeNode));
-          curr->right->token = tok;
-
-          TreeNode *swap = curr;
-          curr = curr->right;
-          curr->parrent = swap;
-        } else{
-          curr->left = calloc(1, sizeof(TreeNode));
-          curr->left->token = tok;
-
-          TreeNode *swap = curr;
-          curr = curr->left;
-          curr->parrent = swap;
-        }
+        insert_current(tok);
         break;
       case END:
         return;
