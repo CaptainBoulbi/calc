@@ -2,7 +2,7 @@
 #define LEXER_H
 
 typedef enum TokenType {
-  BEGIN,
+  UNDEFINED, BEGIN,
   ADD, MIN, MUL, DIV, MOD,
   NUMBER, DECIMAL,
   PARENT, THESE,
@@ -14,7 +14,7 @@ typedef enum TokenType {
   LEFT_SHIFT_ASS, RIGHT_SHIFT_ASS,
   BIT_AND, BIT_OR, BIT_XOR, BIT_NOT,
   LEFT_SHIFT, RIGHT_SHIFT,
-  TEXT, UNDEFINED,
+  TEXT,
   END,
 } TokenType;
 

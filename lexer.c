@@ -12,7 +12,7 @@
 #define ISNAME(c) ((c) == '_' || ISLETTER(c) || ISNUM(c))
 
 char *lookup_TokenType[] = {
-  [BEGIN] = "BEGIN",
+  [UNDEFINED] = "UNDEFINED", [BEGIN] = "BEGIN",
   [ADD] = "ADD", [MIN] = "MIN", [MUL] = "MUL", [DIV] = "DIV", [MOD] = "MOD",
   [NUMBER] = "NUMBER", [DECIMAL] = "DECIMAL",
   [PARENT] = "PARENT", [THESE] = "THESE",
@@ -24,7 +24,7 @@ char *lookup_TokenType[] = {
   [LEFT_SHIFT_ASS] = "LEFT_SHIFT_ASS", [RIGHT_SHIFT_ASS] = "RIGHT_SHIFT_ASS",
   [BIT_AND] = "BIT_AND", [BIT_OR] = "BIT_OR", [BIT_XOR] = "BIT_XOR", [BIT_NOT] = "BIT_NOT",
   [LEFT_SHIFT] = "LEFT_SHIFT", [RIGHT_SHIFT] = "RIGHT_SHIFT",
-  [TEXT] = "TEXT",  [UNDEFINED] = "UNDEFINED",
+  [TEXT] = "TEXT",
   [END] = "END",
 };
 

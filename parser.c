@@ -17,7 +17,7 @@ void insert_parrent(Token tok){
   TreeNode * branch = curr;
   curr = curr->parrent;
 
-  if (token_equals(curr->left->token, branch->token)){
+  if (curr->left){
     curr->left = calloc(1, sizeof(TreeNode));
     curr->left->token = tok;
 
@@ -60,19 +60,10 @@ void parse(char *program, int len){
   while (cursor <= len && tok.type != END){
     cursor += next_token(program + cursor, &tok);
     switch (tok.type) {
-      case MUL:
-      case DIV:
-        if (curr->parrent->token.type == DIV || curr->parrent->token.type == MUL)
-          insert_current(tok);
-        else
-          insert_parrent(tok);
-        break;
       case ADD:
       case MIN:
-        if (curr->parrent->token.type == ADD || curr->parrent->token.type == MIN)
-          insert_parrent(tok);
-        else
-          insert_current(tok);
+        while (curr->parrent->token.type == ADD || curr->parrent->token.type == MIN) curr = curr->parrent;
+        insert_parrent(tok);
         break;
       case NUMBER:
         insert_current(tok);
