@@ -1,9 +1,15 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+// operation order : https://www.cs.uic.edu/~i109/Notes/COperatorPrecedenceTable.pdf
+
 typedef enum TokenType {
   UNDEFINED, BEGIN,
-  ADD, MIN, MUL, DIV, MOD,
+  P0,
+  ADD, MIN,
+  P1,
+  MUL, DIV, MOD,
+  PRIORITY_END,
   NUMBER, DECIMAL,
   PARENT, THESE,
   NOT,
@@ -33,6 +39,11 @@ typedef struct Token {
     Decimal decimal;
   };
 } Token;
+
+static Token token_null = {
+  .type = UNDEFINED,
+  .number = 0,
+};
 
 int next_token(char *prog, Token *tok);
 void print_tok(Token tok);

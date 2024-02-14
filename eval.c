@@ -18,7 +18,7 @@ Decimal evaluate(TreeNode *tn) {
       return evaluate(tn->left) * evaluate(tn->right);
       break;
     case DIV:
-      return evaluate(tn->left) - evaluate(tn->right);
+      return evaluate(tn->left) / evaluate(tn->right);
       break;
     case MOD:
       {

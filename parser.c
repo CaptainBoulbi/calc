@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define PRIORITY(tok, p) ((tok) > (p) && (tok) < PRIORITY_END)
+
 TreeNode root = {
   .token   = { .type = BEGIN },
   .parrent = NULL,
@@ -16,6 +18,14 @@ TreeNode *curr = &root;
 void insert_parrent(Token tok){
   TreeNode * branch = curr;
   curr = curr->parrent;
+
+  printf("[");
+  print_tok(tok);
+  printf("] %p - [", branch);
+  print_tok(curr->left->token);
+  printf("] %p - [", curr->left);
+  print_tok(curr->right->token);
+  printf("] %p", curr->right);
 
   if (curr->left){
     curr->left = calloc(1, sizeof(TreeNode));
@@ -60,9 +70,16 @@ void parse(char *program, int len){
   while (cursor <= len && tok.type != END){
     cursor += next_token(program + cursor, &tok);
     switch (tok.type) {
-      case ADD:
       case MIN:
-        while (curr->parrent->token.type == ADD || curr->parrent->token.type == MIN) curr = curr->parrent;
+        // TODO: implement -NUMBER operation
+      case ADD:
+        while (PRIORITY(curr->parrent->token.type, P0)) curr = curr->parrent;
+        insert_parrent(tok);
+        break;
+      case DIV:
+      case MOD:
+      case MUL:
+        while (PRIORITY(curr->parrent->token.type, P1)) curr = curr->parrent;
         insert_parrent(tok);
         break;
       case NUMBER:
