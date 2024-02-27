@@ -37,21 +37,16 @@ void insert_parrent(Token tok){
 }
 
 void insert_current(Token tok){
+  TreeNode *to;
   if (curr->left){
-    curr->right = calloc(1, sizeof(TreeNode));
-    curr->right->token = tok;
-
-    TreeNode *swap = curr;
-    curr = curr->right;
-    curr->parrent = swap;
+    to = curr->right = calloc(1, sizeof(TreeNode));
   } else{
-    curr->left = calloc(1, sizeof(TreeNode));
-    curr->left->token = tok;
-
-    TreeNode *swap = curr;
-    curr = curr->left;
-    curr->parrent = swap;
+    to = curr->left = calloc(1, sizeof(TreeNode));
   }
+
+  to->token = tok;
+  to->parrent = curr;
+  curr = to;
 }
 
 void parse(char *program, int len){

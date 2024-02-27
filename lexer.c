@@ -221,13 +221,13 @@ void print_tok(Token tok){
   fflush(stdout);
   switch (tok.type) {
     case NUMBER:
-      printf("(%d) ", tok.number);
+      printf("(%d)", tok.number);
       break;
     case DECIMAL:
-      printf("(%.2f) ", tok.decimal);
+      printf("(%.2f)", tok.decimal);
       break;
     case TEXT:
-      printf("(%.*s) ", tok.len, tok.text);
+      printf("(%.*s)", tok.len, tok.text);
       break;
     default:
       break;
