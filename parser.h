@@ -12,7 +12,7 @@ typedef struct TreeNode {
 
 extern TreeNode root;
 
-void print_tree(TreeNode *tn);
+void print_tree(TreeNode *tn, int level);
 void free_tree(TreeNode *tn);
 void parse(char *program, int len);
 

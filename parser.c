@@ -19,14 +19,6 @@ void insert_parrent(Token tok){
   TreeNode * branch = curr;
   curr = curr->parrent;
 
-  printf("[");
-  print_tok(tok);
-  printf("] %p - [", branch);
-  print_tok(curr->left->token);
-  printf("] %p - [", curr->left);
-  print_tok(curr->right->token);
-  printf("] %p", curr->right);
-
   if (curr->left){
     curr->left = calloc(1, sizeof(TreeNode));
     curr->left->token = tok;
@@ -96,17 +88,14 @@ void parse(char *program, int len){
   }
 }
 
-void print_tree(TreeNode *tn){
+void print_tree(TreeNode *tn, int level){
   if (tn == NULL) return;
 
-  printf("\n");
+  for (int i=0; i<level; i++) printf("  ");
   print_tok(tn->token);
-  printf("l(");
-  print_tree(tn->left);
-  printf(") ");
-  printf("r(");
-  print_tree(tn->right);
-  printf(") ");
+  printf("\n");
+  print_tree(tn->left, level+1);
+  print_tree(tn->right, level+1);
 
   return;
 }

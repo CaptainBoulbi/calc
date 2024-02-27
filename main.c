@@ -114,14 +114,15 @@ int main(int argc, char **argv){
 
   interprete(program, program_len);
 
+#if 0
   Decimal resultat = evaluate(&root);
   printf("resultat = %f\n", resultat);
+#endif
 
-  print_tree(&root);
-  puts("");
+  print_tree(&root, 0);
+
   free_tree(root.left);
   free_tree(root.right);
-
   free(program);
 	return 0;
 }

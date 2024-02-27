@@ -230,7 +230,6 @@ void print_tok(Token tok){
       printf("(%.*s) ", tok.len, tok.text);
       break;
     default:
-      printf(" ");
       break;
   }
 }
