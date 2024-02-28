@@ -114,7 +114,7 @@ int main(int argc, char **argv){
 
     interprete(program, program_len);
 
-#if 0
+#if 1
     Decimal resultat = evaluate(&root);
     printf("resultat = %f\n", resultat);
 #endif

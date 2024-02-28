@@ -19,14 +19,14 @@ void insert_parrent(Token tok){
     TreeNode * branch = curr;
     curr = curr->parrent;
 
-    if (curr->left){
+    if (curr->left == branch){
         curr->left = calloc(1, sizeof(TreeNode));
         curr->left->token = tok;
 
         curr->left->left = branch;
         curr->left->parrent = curr;
         curr = curr->left;
-    } else{
+    } else {
         curr->right = calloc(1, sizeof(TreeNode));
         curr->right->token = tok;
 
@@ -55,6 +55,7 @@ void parse(char *program, int len){
     Token tok = {0};
 
     while (cursor <= len && tok.type != END){
+        print_tree(&root, 0);
         cursor += next_token(program + cursor, &tok);
         switch (tok.type) {
             case MIN:
