@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define PRIORITY(tok, p) ((tok) > (p) && (tok) < PRIORITY_END)
+#define PRIORITY(tok, p) ((tok).type > (p) && (tok).type < PRIORITY_END)
 
 TreeNode root = {
     .token   = { .type = BEGIN },
@@ -55,19 +55,18 @@ void parse(char *program, int len){
     Token tok = {0};
 
     while (cursor <= len && tok.type != END){
-        print_tree(&root, 0);
         cursor += next_token(program + cursor, &tok);
         switch (tok.type) {
             case MIN:
                 // TODO: implement -NUMBER operation
             case ADD:
-                while (PRIORITY(curr->parrent->token.type, P0)) curr = curr->parrent;
+                while (PRIORITY(curr->parrent->token, P0)) curr = curr->parrent;
                 insert_parrent(tok);
                 break;
             case DIV:
             case MOD:
             case MUL:
-                while (PRIORITY(curr->parrent->token.type, P1)) curr = curr->parrent;
+                while (PRIORITY(curr->parrent->token, P1)) curr = curr->parrent;
                 insert_parrent(tok);
                 break;
             case NUMBER:
