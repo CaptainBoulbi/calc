@@ -15,7 +15,7 @@ char *lookup_TokenType[] = {
     [UNDEFINED] = "UNDEFINED", [BEGIN] = "BEGIN",
     [ADD] = "ADD", [MIN] = "MIN", [MUL] = "MUL", [DIV] = "DIV", [MOD] = "MOD",
     [NUMBER] = "NUMBER", [DECIMAL] = "DECIMAL",
-    [PARENT] = "PARENT", [THESE] = "THESE",
+    [PAREN] = "PAREN", [THESE] = "THESE",
     [NOT] = "NOT",
     [EQ] = "EQ", [GE] = "GE", [GT] = "GT", [LE] = "LE", [LT] = "LT", [NE] = "NE",
     [AND] = "AND", [OR] = "OR",
@@ -44,7 +44,7 @@ int next_token(char *prog, Token *tok){
 
     switch (prog[offset]) {
         case '(':
-            tok->type = PARENT;
+            tok->type = PAREN;
             break;
         case ')':
             tok->type = THESE;

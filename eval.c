@@ -57,6 +57,8 @@ Decimal evaluate(TreeNode *tn) {
         case DECIMAL:
             return tn->token.decimal;
             break;
+        case PAREN:
+            return evaluate(tn->left);
         default:
             return 0.0f;
             break;

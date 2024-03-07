@@ -49,36 +49,53 @@ void insert_current(Token tok){
     curr = to;
 }
 
+        // if (curr->token.type == THESE) {
+        //     while (curr->token.type != PAREN) curr = curr->parrent;
+        // }
+
+TreeNode *go_back_priority(TreeNode *curr, TokenType priority){
+    while (PRIORITY(curr->token, priority)){
+        curr = curr->parrent;
+    }
+    return curr;
+}
+
 void parse(char *program, int len){
     if (len <= 0) return;
     int cursor = 0;
     Token tok = {0};
 
     while (cursor <= len && tok.type != END){
+        print_tree(&root, 0);
+    
         cursor += next_token(program + cursor, &tok);
         switch (tok.type) {
-            case MIN:
-                // TODO: implement -NUMBER operation
-            case ADD:
-                while (PRIORITY(curr->parrent->token, P0)) curr = curr->parrent;
-                insert_parrent(tok);
-                break;
-            case DIV:
-            case MOD:
-            case MUL:
-                while (PRIORITY(curr->parrent->token, P1)) curr = curr->parrent;
-                insert_parrent(tok);
-                break;
-            case NUMBER:
-                insert_current(tok);
-                break;
-            case END:
-                return;
-                break;
-            default:
-                // TODO: implement default behavior
-                printf("[%s] Not implemented yet.\n", lookup_TokenType[tok.type]);
-                break;
+        case MIN:
+            // TODO: implement -NUMBER operation
+        case ADD:
+            // while (PRIORITY(curr->parrent->token, P0)) curr = curr->parrent;
+            curr = go_back_priority(curr, P0);
+            insert_parrent(tok);
+            break;
+        case DIV:
+        case MOD:
+        case MUL:
+            // while (PRIORITY(curr->parrent->token, P1)) curr = curr->parrent;
+            curr = go_back_priority(curr, P1);
+            insert_parrent(tok);
+            break;
+        case PAREN:
+        case THESE:
+        case NUMBER:
+            insert_current(tok);
+            break;
+        case END:
+            return;
+            break;
+        default:
+            // TODO: implement default behavior
+            printf("[%s] Not implemented yet.\n", lookup_TokenType[tok.type]);
+            break;
         }
     }
 }

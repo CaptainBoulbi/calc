@@ -11,7 +11,7 @@ typedef enum TokenType {
     MUL, DIV, MOD,
     PRIORITY_END,
     NUMBER, DECIMAL,
-    PARENT, THESE,
+    PAREN, THESE,
     NOT,
     EQ, GE, GT, LE, LT, NE,
     AND, OR,
